@@ -5,16 +5,19 @@ function createObjectForms() {
     // Get the container for object forms
     let objectFormsContainer = document.getElementById('objectFormsContainer');
 
-    // Remove the previous "Create Objects" button if it exists
     let previousButtonContainer = document.getElementById('buttonContainer');
+    let previousGlitchContainer = document.getElementById('outputContainer');
     if (previousButtonContainer) {
         previousButtonContainer.remove();
     }
 
+    // if (previousGlitchContainer) {
+    //     previousGlitchContainer.remove();
+    // }
+
     // Clear previous content
     objectFormsContainer.innerHTML = '';
 
-    // Create forms for each object
     for (let i = 1; i <= numberOfObjects; i++) {
         let objectForm = document.createElement('form');
         objectForm.id = 'objectForm_' + i;
@@ -23,8 +26,14 @@ function createObjectForms() {
         <label for="text_${i}">Text for Object ${i}:</label>
         <input type="text" id="text_${i}" value="Object ${i}" required>
 
-        <label for="color_${i}">Colors:</label>
+        <label for="color_${i}">Main Color:</label>
         <input type="color" id="color_${i}" value="#000000">
+
+        <label for="shadowColor1_${i}">Shadow Color 1:</label>
+        <input type="color" id="shadowColor1_${i}" value="#00fffc">
+
+        <label for="shadowColor2_${i}">Shadow Color 2:</label>
+        <input type="color" id="shadowColor2_${i}" value="#fc00ff">
 
         <label for="time_${i}">Animation Speed (ms):</label>
         <input type="number" id="time_${i}" value="500" required>
@@ -40,6 +49,7 @@ function createObjectForms() {
         objectFormsContainer.appendChild(objectForm);
     }
 
+
     // Create a new container for the button
     let buttonContainer = document.createElement('div');
     buttonContainer.id = 'buttonContainer';
@@ -49,6 +59,10 @@ function createObjectForms() {
     createObjectsButton.textContent = 'Create Objects';
     createObjectsButton.addEventListener('click', createObjects);
     buttonContainer.appendChild(createObjectsButton);
+
+    // Create a new container for the output
+    let outputContainer = document.createElement('div');
+    outputContainer.id = 'outputContainer';
 
     // Append the button container after the forms container
     objectFormsContainer.insertAdjacentElement('afterend', buttonContainer);
@@ -63,6 +77,8 @@ function createObjects() {
     for (let i = 1; i <= numberOfObjects; i++) {
         let text = document.getElementById('text_' + i).value;
         let color = document.getElementById('color_' + i).value;
+        let shadowColor1 = document.getElementById('shadowColor1_' + i).value;
+        let shadowColor2 = document.getElementById('shadowColor2_' + i).value;
         let time = document.getElementById('time_' + i).value;
         let order = document.getElementById('order_' + i).value;
         let marg = document.getElementById('marg_' + i).value;
@@ -70,6 +86,8 @@ function createObjects() {
         let newObject = {
             text: text,
             color: color,
+            shadowColor1: shadowColor1,
+            shadowColor2: shadowColor2,
             time: time,
             order: order,
             marg: marg
@@ -86,41 +104,43 @@ function createObjects() {
     outputContainer.innerHTML = ''; // Clear previous content in the output container
 
     createdObjects.forEach(function (obj, index) {
-        createGlitchObject(obj.text, obj.color, obj.time, obj.order, obj.marg, outputContainer);
+        createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
     });
 }
 
-function createGlitchSpan(glitch, clip, top, left, opacity, animation) {
+function createDynamicGlitchSpan(clip, translateX, translateY, opacity, animation) {
     let span = document.createElement('span');
-    // span.textContent = "aaa";
-    span.classList.add(glitch);
-    // span.style.position = 'absolute';
+    span.classList.add('glitch');
+    span.style.position = 'absolute';
     span.style.clipPath = `polygon(${clip})`;
-    span.style.top = top;
-    span.style.left = left;
+    span.style.transform = `translate(${translateX}px, ${translateY}px)`; // Add 'px' units to translate values
     span.style.opacity = opacity;
     span.style.animation = `glitch ${animation} infinite`;
 
     return span;
 }
-function createGlitchObject(text, color, time, order, margin, outputContainer) {
+
+
+function createGlitchObject(text, color, shadowColor1, shadowColor2, time, order, margin, outputContainer) {
     let container = document.createElement('div');
     container.classList.add('container');
     container.style.textAlign = 'center';
-    container.style.margin = margin + 'px';
+    container.style.marginTop = margin + 'px';
+    container.style.marginBottom = margin + 'px';
 
     let glitchText = document.createElement('div');
     glitchText.textContent = text;
+    glitchText.style.color = color;
     glitchText.classList.add('glitch');
-    glitchText.style.fontSize = '2.5rem';
+    glitchText.style.fontSize = '4rem';
     glitchText.style.fontWeight = 'bold';
     glitchText.style.textTransform = 'uppercase';
     glitchText.style.position = 'relative';
-    glitchText.style.textShadow = `0.05em 0 0 ${color}, -0.03em -0.04em 0 ${color}, 0.025em 0.04em 0 ${color}`;
+    glitchText.style.textShadow = `0.05em 0 0 ${shadowColor1}, -0.03em -0.04em 0 ${shadowColor2}, 0.025em 0.04em 0 ${shadowColor1}, 0.025em 0.04em 0 ${shadowColor2}`;
     glitchText.style.animation = `glitch ${time}ms infinite`;
 
-    let span1 = createGlitchSpan('glitch', '0 0, 100% 0, 100% 35%, 0 35%', '-0.04em', '-0.03em', '0.75', '500ms');
-    let span2 = createGlitchSpan('glitch', '0 65%, 100% 65%, 100% 100%, 0 100%', '0.04em', '0.03em', '0.75', '375ms');
+    let span1 = createDynamicGlitchSpan('0 0, 100% 0, 100% 35%, 0 35%', '-0.04em', '-0.03em', '0.75', '500ms');
+    let span2 = createDynamicGlitchSpan('0 65%, 100% 65%, 100% 100%, 0 100%', '0.04em', '0.03em', '0.75', '375ms');
 
     glitchText.appendChild(span1);
     glitchText.appendChild(span2);
@@ -128,4 +148,42 @@ function createGlitchObject(text, color, time, order, margin, outputContainer) {
     container.appendChild(glitchText);
 
     outputContainer.appendChild(container);
+    addGlitchKeyframe(shadowColor1, shadowColor2);
 }
+
+function addGlitchKeyframe(shadowColor1, shadowColor2) {
+    // Create a style element
+    let style = document.createElement('style');
+    style.type = 'text/css';
+
+    // Define the keyframes with dynamic shadow colors
+    style.innerHTML = `
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 ${shadowColor1}, -0.03em -0.04em 0 ${shadowColor2}, 0.025em 0.04em 0 ${shadowColor1};
+            }
+            15% {
+                text-shadow: 0.05em 0 0 ${shadowColor1}, -0.03em -0.04em 0 ${shadowColor2}, 0.025em 0.04em 0 ${shadowColor1};
+            }
+            16% {
+                text-shadow: -0.05em -0.025em 0 ${shadowColor1}, 0.025em 0.035em 0 ${shadowColor2}, -0.05em -0.05em 0 ${shadowColor1};
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 ${shadowColor1}, 0.025em 0.035em 0 ${shadowColor2}, -0.05em -0.05em 0 ${shadowColor1};
+            }
+            50% {
+                text-shadow: 0.05em 0.035em 0 ${shadowColor1}, 0.03em 0 0, 0 -0.04em 0 ${shadowColor2};
+            }
+            99% {
+                text-shadow: 0.05em 0.035em 0 ${shadowColor1}, 0.03em 0 0, 0 -0.04em 0 ${shadowColor2};
+            }
+            100% {
+                text-shadow: -0.05em 0 0 ${shadowColor1}, -0.025em -0.04em 0 ${shadowColor2}, -0.04em -0.025em 0 ${shadowColor1};
+            }
+        }
+    `;
+
+    // Append the style element to the head of the document
+    document.head.appendChild(style);
+}
+
