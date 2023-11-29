@@ -1,3 +1,5 @@
+import { saveObjectFormsData } from './collectData.js';
+
 function createObjectForms() {
     // Get the number of objects from the main form
     let numberOfObjects = parseInt(document.getElementById('numberOfObjects').value);
@@ -108,6 +110,8 @@ function createObjects() {
         saveGlitchObject(obj);
         addGlitchKeyframe(obj.shadowColor1, obj.shadowColor2);
     });
+
+    saveObjectFormsData();
 }
 
 function createDynamicGlitchSpan(clip, translateX, translateY, opacity, animation) {
@@ -196,7 +200,7 @@ function saveGlitchObject(glitchObject) {
 
     // Send JSON to the server
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "save_object.php", true);
+    xhr.open("POST", "collect_glitch_data.php", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(json);
 

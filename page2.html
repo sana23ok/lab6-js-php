@@ -1,96 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My website</title>
-    <link rel="stylesheet" type="text/css" href="styles/styles.css">
-    <link rel="stylesheet" type="text/css" href="styles/glitch.css">
-    <script defer src="scr.js"></script>
+    <title>Second Page</title>
 </head>
-
 <body>
-<div class="flex-container">
+<div id="outputContainer"></div>
 
-    <div class="header">
-        <div class="right-align">
-            <h2 class="add-text">X</h2>
-        </div>
-    </div>
-
-    <div class="main-box">
-        <div class="sidebar-l">
-            <div class="add-el">
-                <p class="main-title-style">
-                    Menu
-                </p>
-            </div>
-
-            <div class="sidebar-content">
-                <ol>
-                    <li><a href="index.html">Main page</a></li>
-                    <li><a href="page2.html">Second page</a></li>
-                </ol>
-            </div>
-        </div>
-
-        <div class="main">
-
-            <div style="display: flex; flex-grow: 1"><h1>Glitch Objects</h1>
-              <div id="objectFormsContainer"></div>
-              <div id="outputContainer"></div>
-
-              <script src="scr.js"></script>
-              <script src="displayGlitchObjects.js"></script>
-
-                <script>
-                    // Call the function when the DOM is ready
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Read collected glitch data from the file
-                        fetch('collected_glitch_data.json')
-                            .then(response => response.json())
-                            .then(data => {
-                                // Call the displayGlitchObjects function with the fetched data
-                                displayGlitchObjects(data);
-                            })
-                            .catch(error => console.error('Error fetching JSON:', error));
-                    });
-                </script>
-            </div>
-
-
-            <div class="add-footer">
-                <p class="main-text-style">
-                Explain it to yourself and teach it to someone else
-                </p>
-            </div>
-
-       </div>
-
-          <div class="sidebar-r">
-            <div class="sidebar-content">
-              <h1 class="add-title-style">If you're looking for video resources</h1>
-              <ul>
-                <li>
-                  <a href="https://youtu.be/_f-qkGJBPts?si=vtGuBzslvlxZclsR">
-                    "The Feynman Technique -
-                    How to Learn Anything Quickly" by Thomas Frank
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          </div>
-
-          <div class="footer">
-            <div class="right-align">
-              <h2 class="add-text">Y</h2>
-            </div>
-          </div>
-          </div>
-
-          </body>
-
-          </html>
+<script src="getData.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        getData();
+        setInterval(getData, 1000);
+    });
+</script>
+</body>
+</html>
