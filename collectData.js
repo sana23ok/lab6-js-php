@@ -1,29 +1,18 @@
-export function saveObjectFormsData() {
-    const objectForms = document.querySelectorAll('form');
-    console.log(objectForms);
-    let dataToSave = [];
+function saveObjectFormsData(allObjects) {
 
-    objectForms.forEach((form, index) => {
-        const text = form.querySelector(`#text_${index + 1}`).value;
-        const color = form.querySelector(`#color_${index + 1}`).value;
-        const shadowColor1 = form.querySelector(`#shadowColor1_${index + 1}`).value;
-        const shadowColor2 = form.querySelector(`#shadowColor2_${index + 1}`).value;
-        const time = form.querySelector(`#time_${index + 1}`).value;
-        const order = form.querySelector(`#order_${index + 1}`).value;
-        const marg = form.querySelector(`#marg_${index + 1}`).value;
+    console.log(allObjects);
+    let dataToSave={};
+    let i=1;
+    // for(let obj of allObjects){
+    //     dataToSave[`obj${i}`]=obj;
+    //     i+=1;
+    // }
 
-        let formData = {
-            text: text,
-            color: color,
-            shadowColor1: shadowColor1,
-            shadowColor2: shadowColor2,
-            time: time,
-            order: order,
-            marg: marg
-        };
+    for(let obj of allObjects){
+        dataToSave[`obj${i}`]=obj;
+        i+=1;
+    }
 
-        dataToSave.push(formData);
-    });
 
     console.log(dataToSave);
 

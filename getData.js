@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     getData();
-    setInterval(getData, 60000);
+    setInterval(getData, 5000);
 });
 
 function getData() {
@@ -24,9 +24,23 @@ function getData() {
 
 function displayGlitchData(glitchData) {
     let outputContainer = document.getElementById('outputContainer');
+    console.log(glitchData);
+    const container=document.querySelector('#outputContainer');
+    outputContainer.innerHTML = '';
 
-    glitchData.forEach(function (obj, index) {
-        //createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
-        console.log(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
-    });
+    for(let obj in glitchData){
+        console.log(glitchData[obj]);
+
+        createGlitchObject(glitchData[obj].text, glitchData[obj].color, glitchData[obj].shadowColor1, glitchData[obj].shadowColor2,glitchData[obj].time, glitchData[obj].order, glitchData[obj].marg, container);
+        addGlitchKeyframe(glitchData[obj].shadowColor1, glitchData[obj].shadowColor2);
+        // const div = document.createElement('div')
+        // div.className='container';
+        // div.innerHTML = glitchData[obj];
+        // outputContainer.append(div);
+    }
+
+    // glitchData.forEach(function (obj, index) {
+    //     //createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
+    //     console.log(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
+    // });
 }

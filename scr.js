@@ -1,4 +1,4 @@
-import { saveObjectFormsData } from './collectData.js';
+// import { saveObjectFormsData } from './collectData.js';
 
 function createObjectForms() {
     // Get the number of objects from the main form
@@ -97,6 +97,7 @@ function createObjects() {
 
             createdObjects.push(newObject);
         })(i);
+
     }
     // Sort objects based on the order property
     createdObjects.sort((a, b) => a.order - b.order);
@@ -104,14 +105,14 @@ function createObjects() {
     // Display information about created objects
     let outputContainer = document.getElementById('outputContainer');
     outputContainer.innerHTML = ''; // Clear previous content in the output container
-
+    let allObjects=[];
     createdObjects.forEach(function (obj, index) {
-        createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
-        saveGlitchObject(obj);
+        allObjects.push(createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer));
         addGlitchKeyframe(obj.shadowColor1, obj.shadowColor2);
     });
-
-    saveObjectFormsData();
+    console.log(allObjects);
+    // saveObjectFormsData(allObjects);
+    saveObjectFormsData(createdObjects);
 }
 
 function createDynamicGlitchSpan(clip, translateX, translateY, opacity, animation) {
@@ -155,6 +156,7 @@ function createGlitchObject(text, color, shadowColor1, shadowColor2, time, order
 
     outputContainer.appendChild(container);
     addGlitchKeyframe(shadowColor1, shadowColor2, order);
+    return container.innerHTML;
 }
 
 function addGlitchKeyframe(shadowColor1, shadowColor2, order) {

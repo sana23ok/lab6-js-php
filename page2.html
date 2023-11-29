@@ -1,19 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Second Page</title>
+    <title>My website</title>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/glitch.css">
+<!--    <script defer src="scr.js"></script>-->
+<!--    <script defer src="collectData.js"></script>-->
+    <script src="scr.js"></script>
+    <script src="getData.js"></script>
 </head>
-<body>
-<div id="outputContainer"></div>
 
-<script src="getData.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        getData();
-        setInterval(getData, 1000);
-    });
-</script>
+<body>
+<div class="flex-container">
+
+    <div class="header">
+        <div class="right-align">
+            <h2 class="add-text">X</h2>
+        </div>
+    </div>
+
+    <div class="main-box">
+        <div class="sidebar-l">
+            <div class="add-el">
+                <p class="main-title-style">
+                    Menu
+                </p>
+            </div>
+
+            <div class="sidebar-content">
+                <ol>
+                    <li><a href="index.html">Main page</a></li>
+                    <li><a href="page2.html">Second page</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="main">
+            <div style="display: flex; flex-grow: 1; align-items: center; justify-content: center;">
+                <div id="outputContainer"></div>
+            </div>
+            
+
+            <div class="add-footer">
+                <p class="main-text-style" style="display: flex; align-items: center; justify-content: center">
+                    <a href="index.html">Main page</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="sidebar-r">
+            <div class="sidebar-content">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="right-align">
+            <h2 class="add-text">Y</h2>
+        </div>
+    </div>
+</div>
+
 </body>
+
 </html>
+
