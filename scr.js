@@ -70,32 +70,32 @@ function createObjectForms() {
 
 function createObjects() {
     // Get the number of objects from the main form
-    let numberOfObjects = parseInt(document.getElementById('numberOfObjects').value);
-
-    // Get information from each object form and create objects
     let createdObjects = [];
+    let numberOfObjects = parseInt(document.getElementById('numberOfObjects').value);
     for (let i = 1; i <= numberOfObjects; i++) {
-        let text = document.getElementById('text_' + i).value;
-        let color = document.getElementById('color_' + i).value;
-        let shadowColor1 = document.getElementById('shadowColor1_' + i).value;
-        let shadowColor2 = document.getElementById('shadowColor2_' + i).value;
-        let time = document.getElementById('time_' + i).value;
-        let order = document.getElementById('order_' + i).value;
-        let marg = document.getElementById('marg_' + i).value;
+        // Use an IIFE to create a new scope for each iteration
+        (function (i) {
+            let text = document.getElementById('text_' + i).value;
+            let color = document.getElementById('color_' + i).value;
+            let shadowColor1 = document.getElementById('shadowColor1_' + i).value;
+            let shadowColor2 = document.getElementById('shadowColor2_' + i).value;
+            let time = document.getElementById('time_' + i).value;
+            let order = document.getElementById('order_' + i).value;
+            let marg = document.getElementById('marg_' + i).value;
 
-        let newObject = {
-            text: text,
-            color: color,
-            shadowColor1: shadowColor1,
-            shadowColor2: shadowColor2,
-            time: time,
-            order: order,
-            marg: marg
-        };
+            let newObject = {
+                text: text,
+                color: color,
+                shadowColor1: shadowColor1,
+                shadowColor2: shadowColor2,
+                time: time,
+                order: order,
+                marg: marg
+            };
 
-        createdObjects.push(newObject);
+            createdObjects.push(newObject);
+        })(i);
     }
-
     // Sort objects based on the order property
     createdObjects.sort((a, b) => a.order - b.order);
 
@@ -105,6 +105,8 @@ function createObjects() {
 
     createdObjects.forEach(function (obj, index) {
         createGlitchObject(obj.text, obj.color, obj.shadowColor1, obj.shadowColor2, obj.time, obj.order, obj.marg, outputContainer);
+        saveGlitchObject(obj);
+        addGlitchKeyframe(obj.shadowColor1, obj.shadowColor2);
     });
 }
 
@@ -137,7 +139,7 @@ function createGlitchObject(text, color, shadowColor1, shadowColor2, time, order
     glitchText.style.textTransform = 'uppercase';
     glitchText.style.position = 'relative';
     glitchText.style.textShadow = `0.05em 0 0 ${shadowColor1}, -0.03em -0.04em 0 ${shadowColor2}, 0.025em 0.04em 0 ${shadowColor1}, 0.025em 0.04em 0 ${shadowColor2}`;
-    glitchText.style.animation = `glitch ${time}ms infinite`;
+    glitchText.style.animation = `glitch_${order} ${time}ms infinite`;
 
     let span1 = createDynamicGlitchSpan('0 0, 100% 0, 100% 35%, 0 35%', '-0.04em', '-0.03em', '0.75', '500ms');
     let span2 = createDynamicGlitchSpan('0 65%, 100% 65%, 100% 100%, 0 100%', '0.04em', '0.03em', '0.75', '375ms');
@@ -148,17 +150,17 @@ function createGlitchObject(text, color, shadowColor1, shadowColor2, time, order
     container.appendChild(glitchText);
 
     outputContainer.appendChild(container);
-    addGlitchKeyframe(shadowColor1, shadowColor2);
+    addGlitchKeyframe(shadowColor1, shadowColor2, order);
 }
 
-function addGlitchKeyframe(shadowColor1, shadowColor2) {
+function addGlitchKeyframe(shadowColor1, shadowColor2, order) {
     // Create a style element
     let style = document.createElement('style');
     style.type = 'text/css';
 
     // Define the keyframes with dynamic shadow colors
     style.innerHTML = `
-        @keyframes glitch {
+        @keyframes glitch_${order} {
             0% {
                 text-shadow: 0.05em 0 0 ${shadowColor1}, -0.03em -0.04em 0 ${shadowColor2}, 0.025em 0.04em 0 ${shadowColor1};
             }
@@ -185,5 +187,24 @@ function addGlitchKeyframe(shadowColor1, shadowColor2) {
 
     // Append the style element to the head of the document
     document.head.appendChild(style);
+}
+
+
+function saveGlitchObject(glitchObject) {
+    // Convert object to JSON
+    let json = JSON.stringify(glitchObject);
+
+    // Send JSON to the server
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "save_object.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(json);
+
+    // Optionally, you can handle the server response here
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log("Object saved successfully:", xhr.responseText);
+        }
+    };
 }
 
